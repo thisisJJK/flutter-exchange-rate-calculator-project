@@ -1,33 +1,128 @@
+import 'package:country_flags/country_flags.dart';
 import 'package:exchange_calculator/viewmodel/exchange_rate_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CalField extends StatelessWidget {
-  final ExchangeRateViewModel vm;
-
-   CalField({
-    super.key, required this.vm
-  });
-
-
+  const CalField({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    final vm = context.watch<ExchangeRateViewModel>();
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        //TODO 국기
-        //TODO 숫자 입력 필드
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height * 0.08,
-          child: TextField(
-            controller: vm.textEditingController,
-            textAlign: TextAlign.right,
-            readOnly: false,
-            showCursor: false,
-            style: const TextStyle(color: Colors.white),
-          ),
-        )
+        //상단
+        _inputField(context, vm),
+
+        const SizedBox(
+          height: 16,
+        ),
+        //하단
+        _outputField(context, vm)
       ],
+    );
+  }
+
+  Widget _inputField(BuildContext context, ExchangeRateViewModel vm) {
+    FocusNode focusNode = FocusNode();
+    final currencyCode = vm.baseCurrency!.baseCurrency;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16,
+      ),
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height * 0.11,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        color: Colors.green.shade50,
+      ),
+      child: Row(
+        children: [
+          CountryFlag.fromCurrencyCode(currencyCode),
+          Expanded(
+            child: AbsorbPointer(
+              child: TextField(
+                controller: vm.textEditingController,
+                focusNode: focusNode,
+                onTap: () => focusNode.unfocus(),
+                onChanged: (value) => vm.onAmountChanged(value),
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
+                readOnly: true,
+                textAlign: TextAlign.right,
+                decoration: const InputDecoration(
+                  border: InputBorder.none,
+                ),
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(
+            width: 6,
+          ),
+          Center(
+            child: Text(
+              currencyCode,
+              style: TextStyle(
+                color: Colors.grey[700],
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _outputField(BuildContext context, ExchangeRateViewModel vm) {
+    final currencyCode = vm.targetCurrency!.baseCurrency;
+    final value = vm.convertedAmount.toStringAsFixed(2);
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16,
+      ),
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height * 0.12,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        color: Colors.blue.shade50,
+      ),
+      child: Row(
+        children: [
+          CountryFlag.fromCurrencyCode(currencyCode),
+          Expanded(
+            child: Text(
+              value,
+              textAlign: TextAlign.right,
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          const SizedBox(
+            width: 6,
+          ),
+          Center(
+            child: Text(
+              currencyCode,
+              style: TextStyle(
+                color: Colors.grey[700],
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

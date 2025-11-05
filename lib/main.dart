@@ -1,8 +1,12 @@
-import 'package:exchange_calculator/view/screen/cal_screen.dart';
+import 'package:exchange_calculator/view/screen/splash_screen.dart';
+import 'package:exchange_calculator/viewmodel/exchange_rate_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+    create: (context) =>  ExchangeRateViewModel(),
+    child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -15,7 +19,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         colorScheme: const ColorScheme.dark(),
       ),
-      home: CalScreen(),
+      home: const SplashScreen(),
     );
   }
 }

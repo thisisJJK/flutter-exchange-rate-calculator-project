@@ -36,7 +36,7 @@ class Button extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width / 4;
-    final height = width * 0.7;
+    final height = width * 0.75;
     final color = switch (textType) {
       TextType.num => Colors.grey[800],
       TextType.oper => Colors.orange,

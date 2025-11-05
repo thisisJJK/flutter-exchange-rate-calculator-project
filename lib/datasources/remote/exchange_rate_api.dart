@@ -11,9 +11,10 @@ class ExchangeRateApi {
       final List<dynamic> data = jsonDecode(res.body);
       final List<ExchangeRate> rates =
           data.map((i) => ExchangeRate.fromJson(i)).toList();
+      print('api : $rates');
       return rates;
     } else {
-      throw Exception('Failed');
+      throw Exception('failed');
     }
   }
 }
