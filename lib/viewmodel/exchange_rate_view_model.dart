@@ -18,7 +18,8 @@ class ExchangeRateViewModel extends ChangeNotifier {
   ExchangeRate? get targetCurrency => _targetCurrency;
   double get inputAmount => _inputAmount;
   double get convertedAmount => _convertedAmount;
-  bool isSeleted = false;
+  bool isSelected = false;
+  int? selectedIndex;
 
   //계산기 로직 변수
   String _display = '0';
@@ -85,8 +86,11 @@ class ExchangeRateViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void onSelectTarget(ExchangeRate newTarget) {
+  void onSelectTarget(ExchangeRate newTarget, int index) {
     if (_targetCurrency == null || _baseCurrency == null) return;
+
+    //국가 선택
+    selectedIndex = index;
 
     // base <-> target 교체
     _baseCurrency = _targetCurrency;
@@ -100,6 +104,7 @@ class ExchangeRateViewModel extends ChangeNotifier {
 
     // 그리고 새로 환산
     _rateCalculate();
+
     notifyListeners();
   }
 

@@ -74,7 +74,13 @@ class ExchangeRateRepository {
       return cachedRates;
     } else {
       print('캐시 만료 - API 호출');
-      return await _fetchAndCacheRates();
+      try {
+        return await _fetchAndCacheRates();
+      } catch (e) {
+        print('API 지원 시간 초과');
+        print('기존 캐시 데이터 사용');
+        return cachedRates;
+      }
     }
   }
 

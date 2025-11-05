@@ -4,14 +4,19 @@ import 'package:exchange_calculator/viewmodel/exchange_rate_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class BookmarkPart extends StatelessWidget {
+class BookmarkPart extends StatefulWidget {
   const BookmarkPart({super.key});
 
   @override
+  State<BookmarkPart> createState() => _BookmarkPartState();
+}
+
+class _BookmarkPartState extends State<BookmarkPart> {
+  @override
   Widget build(BuildContext context) {
     final vm = context.watch<ExchangeRateViewModel>();
-    final rates = vm.rates;
     final bookmarks = vm.getBookmarks();
+    int? selectedIndex;
     return Container(
       padding: const EdgeInsets.all(6),
       height: MediaQuery.of(context).size.height * 0.07,
@@ -27,18 +32,33 @@ class BookmarkPart extends StatelessWidget {
               itemCount: bookmarks.length,
               itemBuilder: (BuildContext context, int index) {
                 final bookmark = bookmarks[index];
+                final isSelected = vm.selectedIndex == index;
+
                 return GestureDetector(
                   onTap: () {
                     //선택된 국가 화폐로 계산
-                    vm.onSelectTarget(bookmark);
-                    print('select');
+                    vm.onSelectTarget(bookmark, index);
+//
                   },
-                  child: CountryFlag.fromCurrencyCode(
-                    bookmark.baseCurrency,
-                    theme: const ImageTheme(
-                      shape: Circle(),
-                      width: 50,
-                      height: 50,
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: isSelected
+                          ? Border.all(
+                              color: Colors.blue,
+                              width: 3,
+                            )
+                          : Border.all(
+                              color: Colors.black,
+                              width: 3,
+                            ),
+                    ),
+                    child: CountryFlag.fromCurrencyCode(
+                      bookmark.baseCurrency,
+                      theme: const ImageTheme(
+                        shape: Circle(),
+                      ),
                     ),
                   ),
                 );

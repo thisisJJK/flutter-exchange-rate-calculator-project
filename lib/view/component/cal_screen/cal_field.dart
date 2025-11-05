@@ -36,7 +36,7 @@ class CalField extends StatelessWidget {
       height: MediaQuery.of(context).size.height * 0.11,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        color: Colors.green.shade50,
+        color: Colors.green.shade100,
       ),
       child: Row(
         children: [
@@ -89,10 +89,10 @@ class CalField extends StatelessWidget {
         horizontal: 16,
       ),
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.12,
+      height: MediaQuery.of(context).size.height * 0.11,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        color: Colors.blue.shade50,
+        color: Colors.blue.shade100,
       ),
       child: Row(
         children: [

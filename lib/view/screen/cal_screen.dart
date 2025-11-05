@@ -1,3 +1,4 @@
+import 'package:exchange_calculator/datasources/constants/api_constants.dart';
 import 'package:exchange_calculator/view/component/cal_screen/bookmark_part.dart';
 import 'package:exchange_calculator/view/component/cal_screen/button.dart';
 import 'package:exchange_calculator/view/component/cal_screen/cal_field.dart';
@@ -24,18 +25,31 @@ class CalScreen extends StatelessWidget {
               color: Colors.amber,
               child: const Center(child: Text('AD')),
             ),
+
             //최근업데이트날짜
             Padding(
-              padding: const EdgeInsets.all(12.0),
+              padding: const EdgeInsets.only(top: 12.0),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text(
-                    '최근 업데이트: ${vm.rates.isNotEmpty ? vm.rates.first.date : "-"}',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey.shade600,
-                    ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Today    : ${ApiConstants.getToday()}',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey.shade600,
+                        ),
+                      ),
+                      Text(
+                        'Updated: ${vm.rates.isNotEmpty ? vm.rates.first.date : "-"}',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey.shade600,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
