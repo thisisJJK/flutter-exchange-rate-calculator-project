@@ -54,33 +54,42 @@ class ExchangeRateViewModel extends ChangeNotifier {
     _rates = await repository.getRates();
 
     final bookmarkedRates = _rates.where((r) => r.isBookmark).toList();
+    final savedBaseCurrency = await repository.loadBaseCurrency();
 
-    if (bookmarkedRates.isNotEmpty) {
-      // 북마크가 있으면 북마크된 항목 중에서 선택
-      _baseCurrency = bookmarkedRates.first;
-
-      if (bookmarkedRates.length > 1) {
-        _targetCurrency = bookmarkedRates[1];
-      } else {
-        // 북마크가 하나만 있으면 base는 USD
-        _baseCurrency = _rates.firstWhere(
+//기준 통화
+if (savedBaseCurrency != null) {
+      _baseCurrency = _rates.firstWhere(
+        (r) => r.baseCurrency == savedBaseCurrency,
+        orElse: () => _rates.firstWhere(
           (r) => r.baseCurrency == 'USD',
           orElse: () => _rates.first,
-        );
-        _targetCurrency = bookmarkedRates.first;
-      }
+        ),
+      );
     } else {
-      // 기본값 설정 (미국 ↔ 한국)
+      // 저장된 게 없으면 USD 사용
       _baseCurrency = _rates.firstWhere(
         (r) => r.baseCurrency == 'USD',
         orElse: () => _rates.first,
       );
+    }
+//타켓 통화
+    if (bookmarkedRates.isNotEmpty) {
+      // 북마크 첫번째 target
+      _targetCurrency = bookmarkedRates.first;
+    } else {
+      // 기본값 설정 (한국)
       _targetCurrency = _rates.firstWhere(
         (r) => r.baseCurrency == 'KRW',
         orElse: () => _rates.last,
       );
     }
-
+    notifyListeners();
+  }
+  //기준 통화 변경
+    Future<void> changeBaseCurrency(ExchangeRate newBase) async {
+    _baseCurrency = newBase;
+    await repository.saveBaseCurrency(newBase.baseCurrency);
+    _rateCalculate();
     notifyListeners();
   }
 
@@ -111,13 +120,8 @@ class ExchangeRateViewModel extends ChangeNotifier {
     //국가 선택
     selectedIndex = index;
 
-    // base <-> target 교체
-    _baseCurrency = _targetCurrency;
     _targetCurrency = newTarget;
 
-    // 변환된 결과를 새 input으로 사용 (화면/내부 동기화)
-    // convertedAmount가 이미 계산되어 있다면 그것을 새 입력으로 바꾼다
-    _inputAmount = _convertedAmount;
     _display = _formatResult(_inputAmount);
     textEditingController.text = _display;
 

@@ -38,28 +38,29 @@ class Button extends StatelessWidget {
     final width = MediaQuery.of(context).size.width / 4;
     final height = width * 0.75;
     final color = switch (textType) {
-      TextType.num => Colors.grey[800],
+      TextType.num => Colors.white,
       TextType.oper => Colors.orange,
-      TextType.etc => Colors.grey[700],
+      TextType.etc => Colors.red,
     };
 
     return InkWell(
       onTap: () {
         vm.input(text);
       },
+      radius: 33,
       child: Ink(
         width: width,
         height: height,
         decoration: BoxDecoration(
-          color: color,
-          border: Border.all(width: 0.3),
+          border: Border.all(width: 0.05),
+          color: Colors.black,
         ),
         child: Center(
           child: Text(
             text,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 28,
+            style: TextStyle(
+              color: color,
+              fontSize: 38,
               fontWeight: FontWeight.bold,
             ),
           ),

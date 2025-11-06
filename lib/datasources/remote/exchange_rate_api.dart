@@ -5,13 +5,6 @@ import 'package:exchange_calculator/model/exchange_rate.dart';
 import 'package:http/http.dart' as http;
 
 class ExchangeRateApi {
-  // 통화 코드 매핑
-  static const Map<String, String> _currencyMapping = {
-    'CNH': 'CNY',
-    'IDR(100)': 'IDR',
-    'JPY(100)': 'JPY',
-  };
-
   Future<List<ExchangeRate>> fetchData() async {
     final res = await http.get(Uri.parse(ApiConstants.requestUrl));
     if (res.statusCode == 200) {

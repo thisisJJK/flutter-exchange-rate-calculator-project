@@ -10,6 +10,7 @@ class ExchangeRateRepository {
 
   static const _cacheKey = 'exchange_rates';
   static const _bookmarkKey = 'bookmarked_currencies';
+  static const _baseCurrencyKey = 'base_currency';
 
   //로컬에 저장
   Future<List<ExchangeRate>> _fetchAndCacheRates() async {
@@ -148,5 +149,18 @@ class ExchangeRateRepository {
       print('북마크 업데이트 실패: $e');
       rethrow;
     }
+  }
+
+  //기준 통화 불러오기
+Future<String?> loadBaseCurrency() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_baseCurrencyKey);
+  }
+
+  //기준 통화 저장
+    Future<void> saveBaseCurrency(String currencyCode) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_baseCurrencyKey, currencyCode);
+    print('기준 통화 저장: $currencyCode');
   }
 }

@@ -45,6 +45,7 @@ class _CountryCardState extends State<CountryCard> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            //북마크 아이콘
             Icon(
               widget.rate.isBookmark ? Icons.star : Icons.star_border,
               color: widget.rate.isBookmark ? Colors.amber : Colors.grey,
@@ -52,25 +53,34 @@ class _CountryCardState extends State<CountryCard> {
             const SizedBox(
               width: 8,
             ),
-            CountryFlag.fromCurrencyCode(
-              widget.rate.baseCurrency,
-              theme: const ImageTheme(
-                shape: Circle(),
-              ),
-            ),
-            const SizedBox(
-              width: 8,
-            ),
-            Text(
-              widget.rate.baseCurrency,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
-            ),
+            //국기 및 통화코드
+            _flagAndCode(),
           ],
         ),
       ),
     );
+  }
+
+  Row _flagAndCode() {
+    return Row(
+            children: [
+              CountryFlag.fromCurrencyCode(
+                widget.rate.baseCurrency,
+                theme: const ImageTheme(
+                  shape: Circle(),
+                ),
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              Text(
+                widget.rate.baseCurrency,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              ),
+            ],
+          );
   }
 }

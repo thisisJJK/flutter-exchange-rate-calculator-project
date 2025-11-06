@@ -14,9 +14,8 @@ class CalField extends StatelessWidget {
       children: [
         //상단
         _inputField(context, vm),
-
         const SizedBox(
-          height: 16,
+          height: 10,
         ),
         //하단
         _outputField(context, vm)
@@ -33,14 +32,18 @@ class CalField extends StatelessWidget {
         horizontal: 16,
       ),
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.11,
+      height: MediaQuery.of(context).size.height * 0.115,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        color: Colors.green.shade100,
+        border: Border.all(color: Colors.green, width: 1.5),
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.grey.shade900,
       ),
       child: Row(
         children: [
           CountryFlag.fromCurrencyCode(currencyCode),
+          const SizedBox(
+            width: 10,
+          ),
           Expanded(
             child: AbsorbPointer(
               child: TextField(
@@ -56,7 +59,7 @@ class CalField extends StatelessWidget {
                   border: InputBorder.none,
                 ),
                 style: const TextStyle(
-                  color: Colors.black,
+                  color: Colors.white,
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
                 ),
@@ -70,7 +73,7 @@ class CalField extends StatelessWidget {
             child: Text(
               currencyCode,
               style: TextStyle(
-                color: Colors.grey[700],
+                color: Colors.grey[300],
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
@@ -89,20 +92,24 @@ class CalField extends StatelessWidget {
         horizontal: 16,
       ),
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.11,
+      height: MediaQuery.of(context).size.height * 0.115,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        color: Colors.blue.shade100,
+        border: Border.all(width: 1.5, color: Colors.blue),
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.grey.shade900,
       ),
       child: Row(
         children: [
           CountryFlag.fromCurrencyCode(currencyCode),
+          const SizedBox(
+            width: 10,
+          ),
           Expanded(
             child: Text(
               value,
               textAlign: TextAlign.right,
               style: const TextStyle(
-                color: Colors.black,
+                color: Colors.white,
                 fontSize: 32,
                 fontWeight: FontWeight.bold,
               ),
@@ -115,7 +122,7 @@ class CalField extends StatelessWidget {
             child: Text(
               currencyCode,
               style: TextStyle(
-                color: Colors.grey[700],
+                color: Colors.grey[300],
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
