@@ -16,13 +16,13 @@ class _BookmarkPartState extends State<BookmarkPart> {
   Widget build(BuildContext context) {
     final vm = context.watch<ExchangeRateViewModel>();
     final bookmarks = vm.getBookmarks();
-    int? selectedIndex;
+
     return Container(
       padding: const EdgeInsets.all(6),
       height: MediaQuery.of(context).size.height * 0.07,
       child: Row(
         children: [
-          //TODO 북마크 리스트
+          //북마크 리스트
           Expanded(
             child: ListView.separated(
               scrollDirection: Axis.horizontal,

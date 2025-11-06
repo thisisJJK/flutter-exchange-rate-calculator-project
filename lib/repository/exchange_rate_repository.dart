@@ -9,6 +9,7 @@ class ExchangeRateRepository {
   final ExchangeRateApi api = ExchangeRateApi();
 
   static const _cacheKey = 'exchange_rates';
+  static const _bookmarkKey = 'bookmarked_currencies';
 
   //로컬에 저장
   Future<List<ExchangeRate>> _fetchAndCacheRates() async {
@@ -20,6 +21,11 @@ class ExchangeRateRepository {
       }
 
       print('API에서 가져온 데이터: ${rates.length}개');
+
+      final bookmarks = await _loadBookmarks();
+      for (var rate in rates) {
+        rate.isBookmark = bookmarks.contains(rate.baseCurrency);
+      }
 
       // 로컬 캐시 저장
       final prefs = await SharedPreferences.getInstance();
@@ -84,8 +90,30 @@ class ExchangeRateRepository {
     }
   }
 
+  // 북마크 목록 불러오기
+  Future<Set<String>> _loadBookmarks() async {
+    final prefs = await SharedPreferences.getInstance();
+    final bookmarks = prefs.getStringList(_bookmarkKey) ?? [];
+    return bookmarks.toSet();
+  }
+
+  // 북마크 목록 저장
+  Future<void> _saveBookmarks(Set<String> bookmarks) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList(_bookmarkKey, bookmarks.toList());
+  }
+
   Future<void> updateBookmark(String currencyCode, bool isBookmark) async {
     try {
+      final bookmarks = await _loadBookmarks();
+      if (isBookmark) {
+        bookmarks.add(currencyCode);
+      } else {
+        bookmarks.remove(currencyCode);
+      }
+
+      await _saveBookmarks(bookmarks);
+
       final prefs = await SharedPreferences.getInstance();
       final List<ExchangeRate> cachedRates = await _loadCachedRates();
 

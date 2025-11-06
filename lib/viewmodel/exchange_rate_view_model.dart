@@ -52,15 +52,34 @@ class ExchangeRateViewModel extends ChangeNotifier {
   //로드
   Future<void> loadRates() async {
     _rates = await repository.getRates();
-    // 기본값 설정 (미국 ↔ 한국)
-    _baseCurrency = _rates.firstWhere(
-      (r) => r.baseCurrency == 'USD',
-      orElse: () => _rates.first,
-    );
-    _targetCurrency = _rates.firstWhere(
-      (r) => r.baseCurrency == 'KRW',
-      orElse: () => _rates.last,
-    );
+
+    final bookmarkedRates = _rates.where((r) => r.isBookmark).toList();
+
+    if (bookmarkedRates.isNotEmpty) {
+      // 북마크가 있으면 북마크된 항목 중에서 선택
+      _baseCurrency = bookmarkedRates.first;
+
+      if (bookmarkedRates.length > 1) {
+        _targetCurrency = bookmarkedRates[1];
+      } else {
+        // 북마크가 하나만 있으면 base는 USD
+        _baseCurrency = _rates.firstWhere(
+          (r) => r.baseCurrency == 'USD',
+          orElse: () => _rates.first,
+        );
+        _targetCurrency = bookmarkedRates.first;
+      }
+    } else {
+      // 기본값 설정 (미국 ↔ 한국)
+      _baseCurrency = _rates.firstWhere(
+        (r) => r.baseCurrency == 'USD',
+        orElse: () => _rates.first,
+      );
+      _targetCurrency = _rates.firstWhere(
+        (r) => r.baseCurrency == 'KRW',
+        orElse: () => _rates.last,
+      );
+    }
 
     notifyListeners();
   }

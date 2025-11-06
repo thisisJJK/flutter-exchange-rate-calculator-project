@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 
 class ExchangeRateApi {
   Future<List<ExchangeRate>> fetchData() async {
+    print(ApiConstants.requestUrl);
     final res = await http.get(Uri.parse(ApiConstants.requestUrl));
     if (res.statusCode == 200) {
       final List<dynamic> data = jsonDecode(res.body);

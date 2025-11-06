@@ -14,16 +14,25 @@ class CountryScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              icon: const Icon(Icons.arrow_back_ios)),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            icon: const Icon(Icons.arrow_back_ios),
+          ),
+          title: const Text('Country list'),
         ),
         body: Column(
           children: [
             // 전체 국가 리스트
             Expanded(
-              child: ListView.builder(
+              child: GridView.builder(
+                padding: const EdgeInsets.all(8),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 8,
+                  crossAxisSpacing: 6,
+                  childAspectRatio: 2.5,
+                ),
                 itemCount: rates.length,
                 itemBuilder: (BuildContext context, int index) {
                   final rate = rates[index];

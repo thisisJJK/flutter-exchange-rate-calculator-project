@@ -17,7 +17,7 @@ class ExchangeRate {
     return ExchangeRate(
       baseCurrency: json['cur_unit'],
       rate: json['deal_bas_r'],
-      date: json['date'] ?? ApiConstants.getToday(),
+      date: json['date'] ?? ApiConstants.searchDate,
       isBookmark: json['is_bookmark'] ?? false,
     );
   }

@@ -6,10 +6,11 @@ import 'package:flutter/material.dart';
 class CountryCard extends StatefulWidget {
   final ExchangeRateViewModel vm;
   final ExchangeRate rate;
+
   const CountryCard({
     super.key,
-    required this.rate,
     required this.vm,
+    required this.rate,
   });
 
   @override
@@ -19,39 +20,55 @@ class CountryCard extends StatefulWidget {
 class _CountryCardState extends State<CountryCard> {
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: IconButton(
-        onPressed: () {
-          widget.vm.toggleBookmark(widget.rate.baseCurrency);
-        },
-        icon: Icon(
-          widget.rate.isBookmark ? Icons.star : Icons.star_border,
-          color: widget.rate.isBookmark ? Colors.amber : Colors.grey,
+    return GestureDetector(
+      onTap: () {
+        widget.vm.toggleBookmark(widget.rate.baseCurrency);
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: widget.rate.isBookmark
+              ? Colors.blue.withValues(alpha: 0.3)
+              : Colors.black,
+          border: widget.rate.isBookmark
+              ? Border.all(
+                  color: Colors.blue,
+                  width: 3,
+                )
+              : Border.all(
+                  color: Colors.blue,
+                  width: 1,
+                ),
+          borderRadius: BorderRadius.circular(12),
         ),
-      ),
-      title: Row(
-        children: [
-          CountryFlag.fromCurrencyCode(
-            widget.rate.baseCurrency,
-            theme: const ImageTheme(
-              shape: Circle(),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Icon(
+              widget.rate.isBookmark ? Icons.star : Icons.star_border,
+              color: widget.rate.isBookmark ? Colors.amber : Colors.grey,
             ),
-          ),
-          const SizedBox(
-            width: 12,
-          ),
-          Text(
-            widget.rate.baseCurrency,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
+            const SizedBox(
+              width: 8,
             ),
-          ),
-        ],
-      ),
-      trailing: Text(
-        widget.rate.rate,
-        style: const TextStyle(
-          fontSize: 21,
+            CountryFlag.fromCurrencyCode(
+              widget.rate.baseCurrency,
+              theme: const ImageTheme(
+                shape: Circle(),
+              ),
+            ),
+            const SizedBox(
+              width: 8,
+            ),
+            Text(
+              widget.rate.baseCurrency,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
+          ],
         ),
       ),
     );
