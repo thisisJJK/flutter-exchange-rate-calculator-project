@@ -40,6 +40,9 @@ class CountryScreen extends StatelessWidget {
                 },
               ),
             ),
+            const SizedBox(
+              height: 12,
+            ),
 
             //애드몹
             Container(

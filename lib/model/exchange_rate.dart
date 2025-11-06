@@ -1,8 +1,8 @@
 import 'package:exchange_calculator/datasources/constants/api_constants.dart';
 
 class ExchangeRate {
-  final String baseCurrency;
-  final String rate;
+   String baseCurrency;
+   String rate;
   final String date;
   bool isBookmark;
 
