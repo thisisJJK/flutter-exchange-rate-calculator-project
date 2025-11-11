@@ -17,14 +17,16 @@ class CalScreen extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.black,
         body: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             //애드몹
             _adMob(),
             //최근업데이트날짜
             _todayAndUpdated(vm, context),
+            const SizedBox(),
             //계산
-            const Expanded(child: CalField()),
+            const CalField(),
+            const SizedBox(),
             // BookmarkPart
             const BookmarkPart(),
             //버튼
@@ -36,68 +38,73 @@ class CalScreen extends StatelessWidget {
   }
 
   Widget _adMob() {
-    return Container(
-      width: 320,
-      height: 50,
-      color: Colors.amber,
-      child: const Center(child: Text('AD')),
+    return Column(
+      children: [
+        Container(
+          width: 320,
+          height: 50,
+          color: Colors.amber,
+          child: const Center(child: Text('AD')),
+        ),
+        const Divider(
+          height: 8,
+          thickness: 0.3,
+        ),
+      ],
     );
   }
 
-  Padding _todayAndUpdated(ExchangeRateViewModel vm, BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 12.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Today    : ${ApiConstants.getToday()}',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey.shade400,
-                ),
+  Widget _todayAndUpdated(ExchangeRateViewModel vm, BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Today    : ${ApiConstants.getToday()}',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey.shade400,
               ),
-              Text(
-                'Updated: ${vm.rates.isNotEmpty ? vm.rates.first.date : "-"}',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey.shade400,
-                ),
+            ),
+            Text(
+              'Updated: ${vm.rates.isNotEmpty ? vm.rates.first.date : "-"}',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey.shade400,
               ),
-            ],
-          ),
-          InkWell(
-            onTap: () {
-              //TODO selectSheet
-              _showBaseCurrencyPicker(vm, context);
-            },
-            borderRadius: BorderRadius.circular(12),
-            child: Ink(
-              width: MediaQuery.of(context).size.width * 0.35,
-              height: MediaQuery.of(context).size.height * 0.05,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
+            ),
+          ],
+        ),
+        InkWell(
+          onTap: () {
+            //selectSheet
+            _showBaseCurrencyPicker(vm, context);
+          },
+          borderRadius: BorderRadius.circular(12),
+          child: Ink(
+            width: MediaQuery.of(context).size.width * 0.35,
+            height: MediaQuery.of(context).size.height * 0.05,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: Colors.green,
+              ),
+              color: Colors.grey.shade900,
+            ),
+            child: const Center(
+              child: Text(
+                'Select base',
+                style: TextStyle(
+                  fontSize: 16,
                   color: Colors.green,
-                ),
-                color: Colors.grey.shade900,
-              ),
-              child: const Center(
-                child: Text(
-                  'Select base',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.green,
-                  ),
                 ),
               ),
             ),
-          )
-        ],
-      ),
+          ),
+        )
+      ],
     );
   }
 

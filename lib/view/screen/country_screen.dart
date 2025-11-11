@@ -47,8 +47,8 @@ class CountryScreen extends StatelessWidget {
             //애드몹
             Container(
               width: 320,
-              height: 50,
-              color: Colors.amber,
+              height: 100,
+              color: Colors.blue,
               child: const Center(child: Text('AD')),
             ),
           ],

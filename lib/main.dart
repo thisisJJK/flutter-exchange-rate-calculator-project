@@ -4,8 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(ChangeNotifierProvider(
-      create: (context) => ExchangeRateViewModel(), child: const MyApp()));
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => ExchangeRateViewModel(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
