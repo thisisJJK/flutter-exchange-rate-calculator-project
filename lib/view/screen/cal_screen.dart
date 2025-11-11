@@ -3,16 +3,31 @@ import 'package:exchange_calculator/datasources/constants/api_constants.dart';
 import 'package:exchange_calculator/view/component/cal_screen/bookmark_part.dart';
 import 'package:exchange_calculator/view/component/cal_screen/button.dart';
 import 'package:exchange_calculator/view/component/cal_screen/cal_field.dart';
+import 'package:exchange_calculator/viewmodel/ad_view_model.dart';
 import 'package:exchange_calculator/viewmodel/exchange_rate_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 
 class CalScreen extends StatelessWidget {
   const CalScreen({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (_) => AdViewModel()..loadAd(isLarge: false),
+      child: const _CalScreenContent(),
+    );
+  }
+}
+
+class _CalScreenContent extends StatelessWidget {
+  const _CalScreenContent();
 
   @override
   Widget build(BuildContext context) {
     final vm = context.watch<ExchangeRateViewModel>();
+    final ad = context.watch<AdViewModel>();
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.black,
@@ -20,7 +35,8 @@ class CalScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             //애드몹
-            _adMob(),
+            if (ad.isAdLoaded && ad.bannerAd != null)
+              _adMob(banner: ad.bannerAd!),
             //최근업데이트날짜
             _todayAndUpdated(vm, context),
             const SizedBox(),
@@ -37,14 +53,13 @@ class CalScreen extends StatelessWidget {
     );
   }
 
-  Widget _adMob() {
+  Widget _adMob({required BannerAd? banner}) {
     return Column(
       children: [
-        Container(
+        SizedBox(
           width: 320,
           height: 50,
-          color: Colors.amber,
-          child: const Center(child: Text('AD')),
+          child: AdWidget(ad: banner!),
         ),
         const Divider(
           height: 8,

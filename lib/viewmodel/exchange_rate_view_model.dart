@@ -1,12 +1,17 @@
 // 기존 import 유지
 import 'package:exchange_calculator/model/exchange_rate.dart';
 import 'package:exchange_calculator/repository/exchange_rate_repository.dart';
+import 'package:exchange_calculator/service/ad_mob_service.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class ExchangeRateViewModel extends ChangeNotifier {
   final TextEditingController textEditingController =
       TextEditingController(text: '0');
   final ExchangeRateRepository repository = ExchangeRateRepository();
+
+
+
   //환율 변수
   List<ExchangeRate> _rates = [];
   ExchangeRate? _baseCurrency; // 위 칸
@@ -57,7 +62,7 @@ class ExchangeRateViewModel extends ChangeNotifier {
     final savedBaseCurrency = await repository.loadBaseCurrency();
 
 //기준 통화
-if (savedBaseCurrency != null) {
+    if (savedBaseCurrency != null) {
       _baseCurrency = _rates.firstWhere(
         (r) => r.baseCurrency == savedBaseCurrency,
         orElse: () => _rates.firstWhere(
@@ -85,8 +90,9 @@ if (savedBaseCurrency != null) {
     }
     notifyListeners();
   }
+
   //기준 통화 변경
-    Future<void> changeBaseCurrency(ExchangeRate newBase) async {
+  Future<void> changeBaseCurrency(ExchangeRate newBase) async {
     _baseCurrency = newBase;
     await repository.saveBaseCurrency(newBase.baseCurrency);
     _rateCalculate();

@@ -1,6 +1,8 @@
 import 'package:exchange_calculator/view/component/country_screen/country_card.dart';
+import 'package:exchange_calculator/viewmodel/ad_view_model.dart';
 import 'package:exchange_calculator/viewmodel/exchange_rate_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 
 class CountryScreen extends StatelessWidget {
@@ -8,7 +10,21 @@ class CountryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      // 페이지 열릴 때마다 새로운 AdViewModel 생성
+      create: (_) => AdViewModel()..loadAd(isLarge: true),
+      child: const _CountryScreenContent(),
+    );
+  }
+}
+
+class _CountryScreenContent extends StatelessWidget {
+  const _CountryScreenContent();
+
+  @override
+  Widget build(BuildContext context) {
     final vm = context.watch<ExchangeRateViewModel>();
+    final ad = context.watch<AdViewModel>();
     final rates = vm.rates;
     return SafeArea(
       child: Scaffold(
@@ -45,12 +61,12 @@ class CountryScreen extends StatelessWidget {
             ),
 
             //애드몹
-            Container(
-              width: 320,
-              height: 100,
-              color: Colors.blue,
-              child: const Center(child: Text('AD')),
-            ),
+            if (ad.isAdLoaded && ad.bannerAd != null)
+              SizedBox(
+                width: 320,
+                height: 100,
+                child: AdWidget(ad: ad.bannerAd!),
+              ),
           ],
         ),
       ),
